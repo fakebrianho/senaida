@@ -63,8 +63,7 @@ void main() {
     vec2 invertedMouse = vec2(1.0-uMouse.x, 1.-uMouse.y);
 
     // Adjust p based on the inverted mouse position
-    // p -= (invertedMouse - 0.5) * 2.0;
-    p -= (uMouse - 0.5) * 2.5;
+    p -= (uMouse - 0.5) * 2.0;
 
     float rz = dualfbm(p);
     

@@ -2,6 +2,7 @@ uniform float uTime;
 uniform vec2 uResolution;
 uniform sampler2D uNoiseTexture;
 uniform vec2 uMouse; // Current mouse position
+uniform vec2 uTargetMouse; // Target mouse position
 
 varying vec2 vUv;
 
@@ -60,11 +61,10 @@ void main() {
     p *= 4.0;
 
     // Invert mouse coordinates in the shader
-    vec2 invertedMouse = vec2(1.0-uMouse.x, 1.-uMouse.y);
+    vec2 invertedMouse = vec2(1.0 - uMouse.x, 1.0 - uMouse.y);
 
     // Adjust p based on the inverted mouse position
-    // p -= (invertedMouse - 0.5) * 2.0;
-    p -= (uMouse - 0.5) * 2.5;
+    p -= (invertedMouse - 0.5) * 2.0;
 
     float rz = dualfbm(p);
     

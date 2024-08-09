@@ -21,8 +21,7 @@ export default function Portal(interactables) {
 				value: new Vector2(0.32, 0.45),
 			},
 			uNoiseTexture: { value: noiseTexture },
-			uTargetMouse: { value: new Vector2(0.5, 0.5) },
-			uMouse: { value: new Vector2(0.5, 0.5) }, // Add mouse uniform
+			uMouse: { value: new Vector2(mouse.x, mouse.y) }, // Add mouse uniform
 		},
 	})
 	const portal = new Mesh(portalGeometry, portalMaterial)

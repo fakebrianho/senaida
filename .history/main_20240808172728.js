@@ -40,9 +40,6 @@ const loadManager = manager(() => {
 // const loadManager = manager(null, camera)
 const raycaster = new THREE.Raycaster()
 const mouse = new THREE.Vector2()
-const defaultVector = new THREE.Vector2(0.5, 0.5)
-let targetMouse = new THREE.Vector2()
-let currentMouse = new THREE.Vector2(0.5, 0.5)
 
 init()
 function init() {
@@ -77,10 +74,10 @@ function init() {
 }
 
 function onMouseMove(event) {
-	targetMouse.x = (event.clientX / window.innerWidth) * 2 - 1
-	targetMouse.y = -(event.clientY / window.innerHeight) * 2 + 1
-	mouse.x = (event.clientX / window.innerWidth) * 2 - 1
-	mouse.y = -(event.clientY / window.innerHeight) * 2 + 1
+	// mouse.x = (event.clientX / window.innerWidth) * 2 - 1
+	// mouse.y = -(event.clientY / window.innerHeight) * 2 + 1
+	mouse.x = event.clientX / window.innerWidth
+	mouse.y = 1.0 - event.clientY / window.innerHeight
 }
 
 function instances() {
@@ -109,29 +106,22 @@ function animate() {
 	const eT = clock.getElapsedTime()
 	meshes.water.material.uniforms.uTime.value = eT
 	meshes.portal.material.uniforms.uTime.value = eT
-	meshes.particles.material.uniforms.uTime.value = eT
+	// meshes.particles.material.uniforms.uTime.value = eT
 
 	if (loadedFlag && interactables.length > 0) {
 		raycaster.setFromCamera(mouse, camera)
 		const intersects = raycaster.intersectObject(interactables[0])
 		if (intersects.length > 0) {
-			currentMouse.x += (intersects[0].uv.x - currentMouse.x) * 0.02
-			currentMouse.y += (intersects[0].uv.y - currentMouse.y) * 0.02
-			meshes.portal.material.uniforms.uMouse.value.set(
-				currentMouse.x,
-				currentMouse.y
-			)
-		} else {
-			currentMouse.x += (defaultVector.x - currentMouse.x) * 0.02
-			currentMouse.y += (defaultVector.y - currentMouse.y) * 0.02
-			meshes.portal.material.uniforms.uMouse.value.set(
-				currentMouse.x,
-				currentMouse.y
-			)
+			//
+			meshes.portal.material.uniforms.uMouse.value = intersects[0].uv
 		}
 	}
+	// meshes.particles.material.uniforms.uCameraPosition.value = camera.position
 	meshes.moon.rotation.x += 0.001
 	meshes.moon.rotation.y -= 0.001
 
+	// if (interactables) {
+	// console.log(intersects)
+	// }
 	composer.composer.render()
 }

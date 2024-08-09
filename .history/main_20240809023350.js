@@ -109,7 +109,7 @@ function animate() {
 	const eT = clock.getElapsedTime()
 	meshes.water.material.uniforms.uTime.value = eT
 	meshes.portal.material.uniforms.uTime.value = eT
-	meshes.particles.material.uniforms.uTime.value = eT
+	// meshes.particles.material.uniforms.uTime.value = eT
 
 	if (loadedFlag && interactables.length > 0) {
 		raycaster.setFromCamera(mouse, camera)

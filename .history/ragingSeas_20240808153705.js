@@ -15,13 +15,13 @@ export function ragingSeas() {
 		uniforms: {
 			uTime: { value: 0 },
 
-			uBigWavesElevation: { value: 0.025 },
-			uBigWavesFrequency: { value: new Vector2(2, 1.0) },
-			uBigWavesSpeed: { value: 0.5 },
+			uBigWavesElevation: { value: 0.1 },
+			uBigWavesFrequency: { value: new Vector2(4, 1.0) },
+			uBigWavesSpeed: { value: 0.75 },
 
 			uSmallWavesElevation: { value: 0.07 },
-			uSmallWavesFrequency: { value: 3 },
-			uSmallWavesSpeed: { value: 0.2 },
+			uSmallWavesFrequency: { value: 1.5 },
+			uSmallWavesSpeed: { value: 0.1 },
 			uSmallIterations: { value: 4 },
 
 			uDepthColor: { value: new Color(debugObject.depthColor) },

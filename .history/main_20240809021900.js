@@ -109,27 +109,26 @@ function animate() {
 	const eT = clock.getElapsedTime()
 	meshes.water.material.uniforms.uTime.value = eT
 	meshes.portal.material.uniforms.uTime.value = eT
-	meshes.particles.material.uniforms.uTime.value = eT
+	// meshes.particles.material.uniforms.uTime.value = eT
 
 	if (loadedFlag && interactables.length > 0) {
 		raycaster.setFromCamera(mouse, camera)
 		const intersects = raycaster.intersectObject(interactables[0])
 		if (intersects.length > 0) {
-			currentMouse.x += (intersects[0].uv.x - currentMouse.x) * 0.02
-			currentMouse.y += (intersects[0].uv.y - currentMouse.y) * 0.02
+			currentMouse.x += (targetMouse.x - currentMouse.x) * 0.05
+			currentMouse.y += (targetMouse.y - currentMouse.y) * 0.05
 			meshes.portal.material.uniforms.uMouse.value.set(
 				currentMouse.x,
 				currentMouse.y
 			)
 		} else {
-			currentMouse.x += (defaultVector.x - currentMouse.x) * 0.02
-			currentMouse.y += (defaultVector.y - currentMouse.y) * 0.02
 			meshes.portal.material.uniforms.uMouse.value.set(
-				currentMouse.x,
-				currentMouse.y
+				defaultVector.x,
+				defaultVector.y
 			)
 		}
 	}
+	// console.log(meshes.portal.material.uniforms.uMouse.value)
 	meshes.moon.rotation.x += 0.001
 	meshes.moon.rotation.y -= 0.001
 
