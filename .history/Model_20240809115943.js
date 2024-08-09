@@ -89,7 +89,7 @@ export default class Model {
 			)
 			this.meshes[`${this.name}`].userData.groupName = this.name
 			const color = this.textureLoader.load(
-				'/obsidian/Obsidian_001_basecolor.jpg'
+				'/obsidian/Obsidian_001_basecolor.png'
 			)
 			const height = this.textureLoader.load('/obsidian2/HEIGHT.png')
 			const roughness = this.textureLoader.load(
