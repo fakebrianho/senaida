@@ -12,7 +12,6 @@ import Portal from './portal'
 import { addMoon } from './addMoon'
 import { addCursor } from './addCursor'
 import { createParticles } from './addParticle'
-import gsap from 'gsap'
 
 const scene = new THREE.Scene()
 const renderer = new THREE.WebGLRenderer({ antialias: true })
@@ -86,7 +85,7 @@ function onMouseMove(event) {
 	targetMouse.y = -(event.clientY / window.innerHeight) * 2 + 1
 	mouse.x = (event.clientX / window.innerWidth) * 2 - 1
 	mouse.y = -(event.clientY / window.innerHeight) * 2 + 1
-	mouseVector.set(mouse.x, mouse.y, 0.5).unproject(camera)
+	mouseVector.set(mouse.x, mouse.y, 0.5)
 }
 
 function instances() {
@@ -127,14 +126,6 @@ function animate() {
 				currentMouse.x,
 				currentMouse.y
 			)
-			gsap.to(composer.bloom, {
-				strength: 12.5,
-				duration: 2,
-			})
-			gsap.to(composer.bloom, {
-				threshold: 0.001,
-				duration: 2,
-			})
 		} else {
 			currentMouse.x += (defaultVector.x - currentMouse.x) * 0.02
 			currentMouse.y += (defaultVector.y - currentMouse.y) * 0.02
@@ -142,21 +133,10 @@ function animate() {
 				currentMouse.x,
 				currentMouse.y
 			)
-			gsap.to(composer.bloom, {
-				strength: 4.5,
-				duration: 2,
-			})
-			gsap.to(composer.bloom, {
-				threshold: 0.01,
-				duration: 2,
-			})
 		}
 	}
 	meshes.moon.rotation.x += 0.001
 	meshes.moon.rotation.y -= 0.001
-
-	//mouse
-	meshes.cursor.position.lerp(mouseVector, 0.25)
 
 	composer.composer.render()
 }

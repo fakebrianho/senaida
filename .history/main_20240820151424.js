@@ -129,11 +129,11 @@ function animate() {
 			)
 			gsap.to(composer.bloom, {
 				strength: 12.5,
-				duration: 2,
+				duration: 1.5,
 			})
 			gsap.to(composer.bloom, {
-				threshold: 0.001,
-				duration: 2,
+				threshold: 0.05,
+				duration: 1.5,
 			})
 		} else {
 			currentMouse.x += (defaultVector.x - currentMouse.x) * 0.02
@@ -144,11 +144,11 @@ function animate() {
 			)
 			gsap.to(composer.bloom, {
 				strength: 4.5,
-				duration: 2,
+				duration: 1.5,
 			})
 			gsap.to(composer.bloom, {
-				threshold: 0.01,
-				duration: 2,
+				radius: 0.04,
+				duration: 1.5,
 			})
 		}
 	}

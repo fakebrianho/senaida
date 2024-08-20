@@ -128,12 +128,8 @@ function animate() {
 				currentMouse.y
 			)
 			gsap.to(composer.bloom, {
-				strength: 12.5,
-				duration: 2,
-			})
-			gsap.to(composer.bloom, {
-				threshold: 0.001,
-				duration: 2,
+				strength: 8.5,
+				duration: 0.5,
 			})
 		} else {
 			currentMouse.x += (defaultVector.x - currentMouse.x) * 0.02
@@ -142,14 +138,6 @@ function animate() {
 				currentMouse.x,
 				currentMouse.y
 			)
-			gsap.to(composer.bloom, {
-				strength: 4.5,
-				duration: 2,
-			})
-			gsap.to(composer.bloom, {
-				threshold: 0.01,
-				duration: 2,
-			})
 		}
 	}
 	meshes.moon.rotation.x += 0.001
