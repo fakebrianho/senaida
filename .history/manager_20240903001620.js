@@ -5,15 +5,18 @@ export function manager(callback, camera) {
 	const loadManager = new LoadingManager()
 	loadManager.onLoad = function () {
 		gsap.to(camera.position, {
-			z: 1,
+			z: 1.25,
 			duration: 4,
-			ease: 'expo.in',
 		})
 		gsap.to('.loader', {
 			autoAlpha: 0,
 			duration: 4,
 			onComplete: () => {
 				document.querySelector('.loader').style.display = 'none'
+				gsap.to('.comingSoon', {
+					opacity: 1,
+					duration: 1,
+				})
 			},
 		})
 		if (callback) callback()

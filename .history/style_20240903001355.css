@@ -109,7 +109,7 @@ button:focus-visible {
 	opacity: 1;
 }
 .comingSoon {
-	opacity: 0;
+	opacity: ;
 	position: absolute;
 	top: 50%;
 	left: 50%;

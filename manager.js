@@ -13,6 +13,10 @@ export function manager(callback, camera) {
 			duration: 4,
 			onComplete: () => {
 				document.querySelector('.loader').style.display = 'none'
+				gsap.to('.comingSoon', {
+					opacity: 1,
+					duration: 1,
+				})
 			},
 		})
 		if (callback) callback()
