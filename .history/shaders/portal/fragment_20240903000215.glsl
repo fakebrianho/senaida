@@ -62,31 +62,6 @@ float fbm(in vec2 p)
     }
     return dot(rz, tr) * 0.2; // Adjusted scaling factor
 }
-
-// Function to interpolate between two values
-float interpolate(float a, float b, float t) {
-    return a + t * (b - a);
-}
-
-// 2D noise function
-float noise2D(vec2 st) {
-    vec2 i = floor(st);
-    vec2 f = fract(st);
-
-    // Four corners in 2D of a tile
-    float a = random(i);
-    float b = random(i + vec2(1.0, 0.0));
-    float c = random(i + vec2(0.0, 1.0));
-    float d = random(i + vec2(1.0, 1.0));
-
-    // Smooth interpolation
-    vec2 u = f * f * (3.0 - 2.0 * f);
-
-    // Mix the four corners
-    return interpolate(a, b, u.x) +
-           (c - a) * u.y * (1.0 - u.x) +
-           (d - b) * u.x * u.y;
-}
 float dualfbm(in vec2 p)
 {
     //get two rotated fbm calls and displace the domain
@@ -110,7 +85,7 @@ void main() {
     vec2 fragCoord = vUv * uResolution.xy;
     vec2 st = vUv * NUM_CELLS;
     vec2 st2 = fragCoord * NUM_CELLS; 
-    // vec3 color1 = voronoi(st2 * 0.01);
+    vec3 color1 = voronoi(st2 * 0.01);
 
     
     //setup system
@@ -122,7 +97,6 @@ void main() {
     // float n = noise(p);
 
     float n = noise(vUv * uResolution.xy); // Use vUv for texture coordinates
-    float newN = noise2D(vUv.xy);
 
     // Invert mouse coordinates in the shader
     // vec2 invertedMouse = vec2(1.0-uMouse.x, 1.-uMouse.y);
@@ -140,12 +114,11 @@ void main() {
     
     //final color
     // vec3 col = vec3(.1,0.1,0.4)/rz;
-    
-    vec3 col = vec3(0.0627, 0.0627, 0.3373);
+    vec3 col = vec3(0.0118, 0.0118, 0.1961);
     // col.x = col.x * n * 0.01;
-    col *= rz;
-    // col = vec3(n) 
+    // col *= n;
+    col = vec3(n) * 0.01;
     // col=pow(abs(col),vec3(.99));
-    gl_FragColor = vec4(col,1.0);
+    gl_FragColor = vec4(color1,1.0);
 
 }

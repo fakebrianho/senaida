@@ -69,7 +69,7 @@ float interpolate(float a, float b, float t) {
 }
 
 // 2D noise function
-float noise2D(vec2 st) {
+float noise(vec2 st) {
     vec2 i = floor(st);
     vec2 f = fract(st);
 
@@ -122,7 +122,6 @@ void main() {
     // float n = noise(p);
 
     float n = noise(vUv * uResolution.xy); // Use vUv for texture coordinates
-    float newN = noise2D(vUv.xy);
 
     // Invert mouse coordinates in the shader
     // vec2 invertedMouse = vec2(1.0-uMouse.x, 1.-uMouse.y);
@@ -141,9 +140,9 @@ void main() {
     //final color
     // vec3 col = vec3(.1,0.1,0.4)/rz;
     
-    vec3 col = vec3(0.0627, 0.0627, 0.3373);
+    vec3 col = vec3(0.0118, 0.0118, 0.1961);
     // col.x = col.x * n * 0.01;
-    col *= rz;
+    col *= n;
     // col = vec3(n) 
     // col=pow(abs(col),vec3(.99));
     gl_FragColor = vec4(col,1.0);

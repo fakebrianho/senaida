@@ -13,9 +13,9 @@ export function postprocessing(scene, camera, renderer) {
 	composer.addPass(renderPass)
 
 	const bloomPass = new UnrealBloomPass()
-	bloomPass.strength = 4.5
+	bloomPass.strength = 1.5
 	bloomPass.radius = 0.04
-	bloomPass.threshold = 0.04
+	bloomPass.threshold = 0.16
 	composer.addPass(bloomPass)
 
 	// const outputPass = new OutputPass()

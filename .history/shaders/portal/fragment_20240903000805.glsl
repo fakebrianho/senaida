@@ -141,7 +141,7 @@ void main() {
     //final color
     // vec3 col = vec3(.1,0.1,0.4)/rz;
     
-    vec3 col = vec3(0.0627, 0.0627, 0.3373);
+    vec3 col = vec3(0.0118, 0.0118, 0.1961);
     // col.x = col.x * n * 0.01;
     col *= rz;
     // col = vec3(n) 
