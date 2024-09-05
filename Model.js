@@ -18,6 +18,7 @@ import {
 	Mesh,
 	MeshPhysicalMaterial,
 	MeshStandardMaterial,
+	MeshNormalMaterial,
 } from 'three'
 
 export default class Model {
@@ -26,11 +27,13 @@ export default class Model {
 		this.meshes = obj.meshes
 		this.file = obj.url
 		this.scene = obj.scene
+		this.outline = obj.outline
 		this.loader = new GLTFLoader(obj.manager)
 		this.dracoLoader = new DRACOLoader()
 		this.dracoLoader.setDecoderPath('./draco/')
 		this.loader.setDRACOLoader(this.dracoLoader)
 		this.textureLoader = new TextureLoader()
+		this.obsidian = obj.obsidian
 		this.animations = obj.animationState || false
 		this.replaceMaterials = obj.replace || false
 		this.defaultMatcap = obj.replaceURL
@@ -88,38 +91,46 @@ export default class Model {
 				this.rotation.z
 			)
 			this.meshes[`${this.name}`].userData.groupName = this.name
-			const color = this.textureLoader.load(
-				'/obsidian/Obsidian_001_basecolor.jpg'
-			)
-			const height = this.textureLoader.load('/obsidian2/HEIGHT.png')
-			const roughness = this.textureLoader.load(
-				'/obsidian2/ROUGHNESS.png'
-			)
-			const normal = this.textureLoader.load('/obsidian2/NORMAL.png')
-			const ambient = this.textureLoader.load('/obsidian2/AO.png')
-			const material = new MeshPhysicalMaterial({
-				map: color,
-				metalness: 0.5,
-				roughness: 0.5,
-				ior: 1.5,
-				transmission: 0.5,
-				opacity: 1,
-				iridescence: 0.82,
-				iridescenceIOR: 1.23,
-				// thickness: 0.3,
-				// transparent: true,
-				// wireframe: true,
-				roughnessMap: roughness,
-				displacementMap: height,
-				aoMap: ambient,
-				displacementScale: 0.2,
-				normalMap: normal,
-			})
-			this.meshes[`${this.name}`].traverse((child) => {
-				if (child.isMesh) {
-					child.material = material
-				}
-			})
+			if (this.obsidian) {
+				const color = this.textureLoader.load(
+					'/obsidian/Obsidian_001_basecolor.jpg'
+				)
+				const height = this.textureLoader.load('/obsidian2/HEIGHT.png')
+				const roughness = this.textureLoader.load(
+					'/obsidian2/ROUGHNESS.png'
+				)
+				const normal = this.textureLoader.load('/obsidian2/NORMAL.png')
+				const ambient = this.textureLoader.load('/obsidian2/AO.png')
+				const material = new MeshPhysicalMaterial({
+					map: color,
+					metalness: 0.5,
+					roughness: 0.5,
+					ior: 1.5,
+					transmission: 0.5,
+					opacity: 1,
+					iridescence: 0.82,
+					iridescenceIOR: 1.23,
+					roughnessMap: roughness,
+					displacementMap: height,
+					aoMap: ambient,
+					displacementScale: 0.2,
+					normalMap: normal,
+				})
+				this.meshes[`${this.name}`].traverse((child) => {
+					if (child.isMesh) {
+						child.material = material
+					}
+				})
+			}
+
+			if (this.outline) {
+				this.meshes[`${this.name}`].traverse((child) => {
+					if (child.isMesh) {
+						// child.material = new MeshNormalMaterial()
+						child.material.wireframe = true
+					}
+				})
+			}
 
 			this.scene.add(this.meshes[`${this.name}`])
 		})
