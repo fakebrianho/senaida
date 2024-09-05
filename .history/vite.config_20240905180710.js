@@ -12,7 +12,7 @@ export default defineConfig({
 			input: {
 				// main: './index.html',
 				main: resolve(__dirname, 'index.html'),
-				page2: resolve(__dirname, 'page2/index.html'),
+				page2: resolve(__dirname, 'index.html'),
 				// page2: './page2.html',
 				// Add more pages as needed
 			},
