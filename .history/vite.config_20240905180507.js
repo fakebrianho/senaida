@@ -10,8 +10,7 @@ export default defineConfig({
 	build: {
 		rollupOptions: {
 			input: {
-				// main: './index.html',
-				main: resolve(__dirname, 'index.html'),
+				main: './index.html',
 				// page2: './page2.html',
 				// Add more pages as needed
 			},
