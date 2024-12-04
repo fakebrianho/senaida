@@ -107,7 +107,6 @@ button:focus-visible {
 	top: 0;
 	left: 0;
 	opacity: 1;
-	z-index: 1;
 }
 .comingSoon {
 	opacity: 0;
@@ -127,10 +126,4 @@ audio {
 	top: 0;
 	left: 0;
 	opacity: 1;
-	width: 100vw;
-	height: 100vh;
-	display: flex;
-	justify-content: center;
-	background-color: black;
-	align-items: center;
 }

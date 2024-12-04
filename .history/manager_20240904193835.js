@@ -21,6 +21,10 @@ export function manager(callback, camera, page = 1) {
 				},
 			})
 		} else {
+			// gsap.to(camera.position, {
+			// 	z: 2,
+			// 	duration: 4,
+			// })
 			gsap.to('.loader', {
 				autoAlpha: 0,
 				duration: 4,
