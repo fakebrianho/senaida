@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Vite App</title>
+  <link rel="stylesheet" href="page2/style2.css">
+</head>
+
+<body>
+  <div class='loader'>
+    <p>Loading...</p>
+  </div>
+  <p class='comingSoon'>Coming Soon</p>
+  <audio id="audio" controls></audio>
+  <audio id='asdfsd' controls src='/audio/song3.mp3' autoplay></audio>
+  <div class="audio-player">
+    <input type="file" id="audio-file" accept="audio/*">
+    <audio id="audio-element">
+      <source src="audio/FRAGILE_remixe_noise.wav" type="audio/wav">
+      <!-- <source src="your-audio.mp3" type="audio/mpeg"> -->
+    </audio>
+    <div class="controls">
+      <button id="play-pause">Play</button>
+      <input type="range" id="seek-bar" value="0">
+      <span id="current-time">0:00</span> / <span id="duration">0:00</span>
+    </div>
+  </div>
+  <!-- <script type="module" src="/main.js"></script> -->
+  <script type="module" src="page2/page2.js"></script>
+</body>
+
+</html>
