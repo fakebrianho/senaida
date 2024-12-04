@@ -76,26 +76,9 @@ function init() {
 	scene.add(meshes.moon)
 
 	window.addEventListener('mousemove', onMouseMove)
-	window.addEventListener('click', onClick)
 	instances()
 	resize()
 	animate()
-}
-
-function onClick(event) {
-	const mouseX = (event.clientX / window.innerWidth) * 2 - 1
-	const mouseY = -(event.clientY / window.innerHeight) * 2 + 1
-	raycaster.setFromCamera(mouse, camera)
-	const intersects = raycaster.intersectObjects(interactables)
-	if (intersects.length > 0) {
-		gsap.to('canvas', {
-			opacity: 0,
-			duration: 1.5,
-			onComplete: () => {
-				window.location.href = 'page2/index.html'
-			},
-		})
-	}
 }
 
 function onMouseMove(event) {
