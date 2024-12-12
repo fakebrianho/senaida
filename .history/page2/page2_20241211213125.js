@@ -77,33 +77,17 @@ back.addEventListener('click', (e) => {
 					onComplete: () => {
 						selected = null
 						selectFlag = false
-						isGenerating = false // Reset generating state
 						console.log(
 							'Emissive reset complete, selected:',
 							selected
 						)
 					},
 				})
+				// material.opacity = 1
 				material.needsUpdate = true
 			}
 		}
 	}
-
-	// Reset PARAMS to default values
-	PARAMS.frequency = 1.0
-	PARAMS.amplitude = 1.0
-	PARAMS.LoFi = false
-	PARAMS.Seeding = 1.0
-	PARAMS.lowEnergy = 1.0
-	PARAMS.midEnergy = 1.0
-	PARAMS.highEnergy = 1.0
-
-	// Remove existing pane and create a new one
-	const oldPane = document.getElementById('tweakpane-container')
-	if (oldPane) {
-		oldPane.remove()
-	}
-	setupPane()
 
 	gsap.to('.center-con', {
 		opacity: 0,
