@@ -393,11 +393,11 @@ function onMouseMove(event) {
 			if (!audioFlag) {
 				analyser = analyzeAudio()
 				analyser.initAudio()
-				// // // // if (PARAMS.LoFi) {
-				// // // 	analyser.swapSongs(intersects[0].object.userData.lf)
-				// // } else {
-				analyser.swapSongs(intersects[0].object.userData.url)
-				// }
+				if (PARAMS.LoFi) {
+					analyser.swapSongs(intersects[0].object.userData.lf)
+				} else {
+					analyser.swapSongs(intersects[0].object.userData.url)
+				}
 				mouseText.innerHTML = intersects[0].object.userData.name
 				mouseText.style.opacity = '1'
 				prev = active
