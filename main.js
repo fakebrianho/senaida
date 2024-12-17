@@ -1,9 +1,7 @@
 // import './style.css'
 import * as THREE from 'three'
 import { addBoilerPlateMesh, addStandardMesh } from './addMeshes'
-import { addLight, addAmbient } from './addLights'
 import Model from './Model'
-import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls'
 import { HDRI } from './environment'
 import { manager } from './manager'
 import { ragingSeas } from './ragingSeas'
@@ -28,10 +26,7 @@ const camera = new THREE.PerspectiveCamera(
 )
 camera.position.set(0, 0.2, 3)
 
-//Globals
 const meshes = {}
-const lights = {}
-const mixers = []
 const clock = new THREE.Clock()
 const composer = postprocessing(scene, camera, renderer)
 const interactables = []
@@ -39,16 +34,13 @@ let loadedFlag = false
 const loadManager = manager(() => {
 	loadedFlag = true
 }, camera)
-// const loadManager = manager(null, camera)
 const raycaster = new THREE.Raycaster()
 const mouse = new THREE.Vector2()
 const defaultVector = new THREE.Vector2(0.5, 0.5)
 let targetMouse = new THREE.Vector2()
 let currentMouse = new THREE.Vector2(0.5, 0.5)
 const mouseVector = new THREE.Vector3(0, 0, 0.5)
-// const controls = new OrbitControls(camera, renderer.domElement)
 
-//modal
 let close = document.querySelector('.close_modal')
 let modal = document.querySelector('.modal')
 close.addEventListener('click', () => {
@@ -83,13 +75,9 @@ function init() {
 	scene.add(meshes.cursor)
 
 	scene.environment = HDRI(loadManager, '/hdri3.hdr')
-	//lights
 
-	//changes
-	// meshes.default.scale.set(2, 2, 2)
 	meshes.default.position.set(0, 0.2, 1.25)
-	// meshes.cursor.position.z = 0.8511964107676969
-	//scene operations
+
 	scene.add(meshes.water)
 	scene.add(meshes.portal)
 	scene.add(meshes.moon)
@@ -104,8 +92,6 @@ function init() {
 }
 
 function onClick(event) {
-	const mouseX = (event.clientX / window.innerWidth) * 2 - 1
-	const mouseY = -(event.clientY / window.innerHeight) * 2 + 1
 	raycaster.setFromCamera(mouse, camera)
 	const intersects = raycaster.intersectObjects(interactables)
 	if (intersects.length > 0) {
@@ -235,7 +221,6 @@ function animate() {
 	meshes.moon.rotation.x += 0.001
 	meshes.moon.rotation.y -= 0.001
 
-	//mouse
 	meshes.cursor.position.lerp(mouseVector, 0.25)
 
 	composer.composer.render()

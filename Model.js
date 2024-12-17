@@ -13,12 +13,8 @@ import {
 	BufferGeometry,
 	Float32BufferAttribute,
 	AdditiveBlending,
-	MeshBasicMaterial,
 	Group,
-	Mesh,
 	MeshPhysicalMaterial,
-	MeshStandardMaterial,
-	MeshNormalMaterial,
 } from 'three'
 
 export default class Model {

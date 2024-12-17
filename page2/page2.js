@@ -4,41 +4,23 @@ import { addBoilerPlateMesh } from '../addMeshes'
 import Model from '../Model'
 import { HDRI } from '../environment'
 import { manager } from '../manager'
-import { OrbitControls } from 'three/examples/jsm/Addons.js'
 import { postprocessing } from '../postprocessing'
 import { addGlass } from '../addGlass'
 import { addVisualizer } from '../addVisualizer'
 import { analyzeAudio } from '../analyzeAudio'
 import { Pane } from 'tweakpane'
 import { getRandomRemixUrl } from './remix'
+import { setupButtons } from './button'
 import gsap from 'gsap'
 
-//play button
-const btn = document.querySelector('.play')
-btn.addEventListener('click', () => {
-	gsap.to('.autoplay', {
-		opacity: 0,
-		duration: 1.5,
-		onComplete: () => {
-			document.querySelector('.autoplay').style.display = 'none'
-		},
-	})
-	const introTimeline = gsap.timeline()
-	introTimeline
-		.to('.intro', { opacity: 1, duration: 1.5 })
-		.to('.intro', { opacity: 0, duration: 1 }, '+=2')
-})
-
+setupButtons()
 const back = document.querySelector('.round')
-const arrow = document.querySelector('.arrow')
 back.addEventListener('click', (e) => {
 	e.stopPropagation()
 	e.preventDefault()
 
-	// Stop the audio first
 	stopAudio()
 
-	// Reset all visualizers to their original positions
 	for (let i = 1; i <= 15; i++) {
 		const vis = meshes[`visualizer${i}`]
 		if (vis) {
@@ -56,7 +38,6 @@ back.addEventListener('click', (e) => {
 				duration: 1,
 			})
 
-			// Reset material colors
 			if (i === selected) {
 				const material = vis.outer.material
 				console.log('Resetting color for visualizer', i)
@@ -77,7 +58,7 @@ back.addEventListener('click', (e) => {
 					onComplete: () => {
 						selected = null
 						selectFlag = false
-						isGenerating = false // Reset generating state
+						isGenerating = false
 						console.log(
 							'Emissive reset complete, selected:',
 							selected
@@ -89,7 +70,6 @@ back.addEventListener('click', (e) => {
 		}
 	}
 
-	// Reset PARAMS to default values
 	PARAMS.frequency = 1.0
 	PARAMS.amplitude = 1.0
 	PARAMS.LoFi = false
@@ -98,7 +78,6 @@ back.addEventListener('click', (e) => {
 	PARAMS.midEnergy = 1.0
 	PARAMS.highEnergy = 1.0
 
-	// Remove existing pane and create a new one
 	const oldPane = document.getElementById('tweakpane-container')
 	if (oldPane) {
 		oldPane.remove()
@@ -122,7 +101,6 @@ renderer.physicallyCorrectLights = true
 scene.background = new THREE.Color('#000000')
 
 renderer.toneMapping = THREE.ACESFilmicToneMapping
-renderer.outputEncoding = THREE.sRGBEncoding // renderer.toneMappingExposure = 4.5
 
 renderer.setSize(window.innerWidth, window.innerHeight)
 renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
@@ -134,7 +112,6 @@ const camera = new THREE.PerspectiveCamera(
 )
 camera.position.set(0, 0, 25)
 
-//Globals
 let analyser
 const meshes = {}
 const visGroup = new THREE.Group()
@@ -153,7 +130,6 @@ const loadManager = manager(
 )
 const raycaster = new THREE.Raycaster()
 const mouse = new THREE.Vector2()
-// const controls = new OrbitControls(camera, renderer.domElement)
 let audioFlag = false
 let selectFlag = false
 const PARAMS = {
@@ -161,7 +137,6 @@ const PARAMS = {
 	amplitude: 1.0,
 	LoFi: false,
 	Seeding: 1.0,
-	// Add new energy parameters
 	lowEnergy: 1.0,
 	midEnergy: 1.0,
 	highEnergy: 1.0,
@@ -169,21 +144,17 @@ const PARAMS = {
 
 const composer = postprocessing(scene, camera, renderer)
 
-// Store original positions at the top with other globals
 function calculateMultiCirclePositions(totalItems) {
 	const positions = {}
 
-	// Inner circle parameters
 	const innerRadius = 2
 	const innerItems = 5
 	const innerAngleStep = (2 * Math.PI) / innerItems
 
-	// Outer circle parameters
 	const outerRadius = 4
 	const outerItems = totalItems - innerItems
 	const outerAngleStep = (2 * Math.PI) / outerItems
 
-	// Position inner circle items
 	for (let i = 1; i <= innerItems; i++) {
 		const angle = innerAngleStep * (i - 1)
 		positions[`visualizer${i}`] = {
@@ -193,7 +164,6 @@ function calculateMultiCirclePositions(totalItems) {
 		}
 	}
 
-	// Position outer circle items
 	for (let i = innerItems + 1; i <= totalItems; i++) {
 		const angle = outerAngleStep * (i - innerItems - 1)
 		positions[`visualizer${i}`] = {
@@ -213,7 +183,6 @@ function init() {
 	renderer.setSize(window.innerWidth, window.innerHeight)
 	document.body.appendChild(renderer.domElement)
 
-	//meshes
 	meshes.default = addBoilerPlateMesh()
 	meshes.glass = addGlass()
 	meshes.visualizer1 = addVisualizer(
@@ -307,7 +276,6 @@ function init() {
 		'WEIGHTLESS'
 	)
 
-	// Add all visualizers to the visGroup
 	for (let i = 1; i <= 15; i++) {
 		const vis = meshes[`visualizer${i}`]
 		const pos = originalPositions[`visualizer${i}`]
@@ -318,18 +286,15 @@ function init() {
 		vis.inner.position.set(pos.x, pos.y, pos.z)
 		vis.outer.position.set(pos.x, pos.y, pos.z)
 
-		// Add to interactables
 		interactables.push(vis.outer)
 	}
 
 	meshes.glass.position.set(0, 0, -0.75)
 
 	scene.environment = HDRI(loadManager, '/hdri5.hdr')
-	//lights
 
 	meshes.default.position.set(0, 0.2, 1.25)
 
-	//scene operations
 	scene.add(meshes.glass)
 	scene.add(visGroup)
 
@@ -379,7 +344,7 @@ function onMouseMove(event) {
 	const intersects = raycaster.intersectObjects(interactables)
 	const mouseText = document.querySelector('.mouse-text')
 	mouseText.style.left = event.clientX + 'px'
-	mouseText.style.top = event.clientY + 20 + 'px' // 20px offset from cursor
+	mouseText.style.top = event.clientY + 20 + 'px'
 
 	if (!selectFlag) {
 		if (intersects.length > 0) {
@@ -393,11 +358,7 @@ function onMouseMove(event) {
 			if (!audioFlag) {
 				analyser = analyzeAudio()
 				analyser.initAudio()
-				// // // // if (PARAMS.LoFi) {
-				// // // 	analyser.swapSongs(intersects[0].object.userData.lf)
-				// // } else {
 				analyser.swapSongs(intersects[0].object.userData.url)
-				// }
 				mouseText.innerHTML = intersects[0].object.userData.name
 				mouseText.style.opacity = '1'
 				prev = active
@@ -438,15 +399,12 @@ function onClick(event) {
 	if (intersects.length > 0) {
 		const clickedNum = intersects[0].object.userData.num
 
-		// Move all visualizers except the clicked one
 		for (let i = 1; i <= 15; i++) {
 			if (i !== clickedNum) {
 				const vis = meshes[`visualizer${i}`]
 				if (vis) {
-					// Calculate which side to move to based on position relative to clicked visualizer
 					const pos = originalPositions[`visualizer${i}`]
-					const targetX = pos.x > 0 ? 10 : -10 // Move right items right, left items left
-
+					const targetX = pos.x > 0 ? 10 : -10
 					gsap.to(vis.inner.position, {
 						x: targetX,
 						y: vis.inner.position.y,
@@ -476,7 +434,6 @@ function onClick(event) {
 			duration: 1,
 		})
 
-		// Animate the selected visualizer to center
 		gsap.to(meshes[`visualizer${clickedNum}`].inner.position, {
 			x: 0,
 			y: 0,
@@ -494,15 +451,13 @@ function onClick(event) {
 		const targetEmissive = new THREE.Color()
 
 		if (PARAMS.LoFi) {
-			targetColor.setRGB(1, 0, 0.8) // Light pink
+			targetColor.setRGB(1, 0, 0.8)
 			targetEmissive.setRGB(1, 0, 0)
 		} else {
-			targetColor.setRGB(1, 0.45, 0.4) // Light gold
+			targetColor.setRGB(1, 0.45, 0.4)
 			targetEmissive.setRGB(1, 215 / 255, 0)
-			// targetEmissive.setRGB(1, 0, 0)
 		}
 
-		// Using GSAP for smooth color transition
 		gsap.to(material.color, {
 			r: targetColor.r,
 			g: targetColor.g,
@@ -521,7 +476,7 @@ function onClick(event) {
 
 		material.transparent = true
 		material.needsUpdate = true
-		material.emissiveIntensity = 0.2 // Adjust value between 0 and 1
+		material.emissiveIntensity = 0.2
 	}
 }
 
@@ -590,10 +545,10 @@ function animate() {
 					data.frequency * PARAMS.amplitude * 0.5
 				const mappedFreq = THREE.MathUtils.mapLinear(
 					data.frequency,
-					0, // min input value
-					255, // max input value (assuming your frequency data is 0-255)
-					0, // min output value
-					0.8 // max output value
+					0,
+					255,
+					0,
+					0.8
 				)
 				vis.outer.material.displacementScale = mappedFreq
 			}
@@ -622,7 +577,6 @@ function stopAudio() {
 
 		audioFlag = false
 
-		// Reset previous visualizer if it exists
 		if (prev !== null) {
 			const vis = meshes[`visualizer${prev}`]
 			if (vis) {
@@ -630,7 +584,6 @@ function stopAudio() {
 			}
 		}
 
-		// Reset current visualizer
 		if (active !== null) {
 			const vis = meshes[`visualizer${active}`]
 			if (vis) {
@@ -638,13 +591,11 @@ function stopAudio() {
 			}
 		}
 
-		// Reset active and prev states
 		active = null
 		prev = null
 	}
 }
 
-// Helper function to reset visualizer uniforms
 function resetVisualizer(vis) {
 	const uniforms = ['uAmp', 'uFreq', 'uLowF', 'uMidF', 'uHighF']
 
@@ -654,10 +605,9 @@ function resetVisualizer(vis) {
 	})
 }
 
-let isGenerating = false // Add this with other globals
+let isGenerating = false
 
 function setupPane() {
-	// Create a container div with an ID
 	const container = document.createElement('div')
 	container.id = 'tweakpane-container'
 	document.body.appendChild(container)
@@ -666,7 +616,6 @@ function setupPane() {
 		container: container,
 	})
 
-	// Style the container
 	pane.element.style.position = 'fixed'
 	pane.element.style.bottom = '50px'
 	pane.element.style.left = '50%'
@@ -697,10 +646,9 @@ function setupPane() {
 		format: (v) => v.toFixed(1),
 	})
 
-	// Add Energy Controls in a new folder
 	const energyFolder = folder.addFolder({
 		title: 'Energy Controls',
-		expanded: true, // Make it open by default
+		expanded: true,
 	})
 
 	energyFolder.addBinding(PARAMS, 'lowEnergy', {
@@ -735,7 +683,6 @@ function setupPane() {
 	btn.on('click', () => {
 		const audio = document.getElementById('audio')
 
-		// Function to handle the generation process
 		const startGeneration = () => {
 			gsap.to(composer.bloom, {
 				strength: 0.1,
@@ -762,11 +709,11 @@ function setupPane() {
 						const colorTimeline = gsap.timeline()
 
 						const colors = [
-							{ r: 1, g: 0, b: 0 }, // Red
-							{ r: 0, g: 0, b: 1 }, // Blue
-							{ r: 1, g: 0, b: 1 }, // Purple
-							{ r: 0, g: 1, b: 0 }, // Green
-							{ r: 1, g: 0.45, b: 0.4 }, // Back to original color
+							{ r: 1, g: 0, b: 0 },
+							{ r: 0, g: 0, b: 1 },
+							{ r: 1, g: 0, b: 1 },
+							{ r: 0, g: 1, b: 0 },
+							{ r: 1, g: 0.45, b: 0.4 },
 						]
 
 						colors.forEach((color, index) => {
@@ -813,12 +760,9 @@ function setupPane() {
 			})
 		}
 
-		// If we're not in generating phase, start first generation
-		// If we are in generating phase, restart the generation
 		if (!isGenerating) {
 			startGeneration()
 		} else {
-			// We're already in generation phase, restart the process
 			startGeneration()
 		}
 	})

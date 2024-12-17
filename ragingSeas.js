@@ -4,7 +4,6 @@ import { PlaneGeometry, ShaderMaterial, Vector2, Color, Mesh } from 'three'
 
 export function ragingSeas() {
 	const debugObject = {}
-	// debugObject.depthColor = '#ff4000'
 	debugObject.surfaceColor = '#000000'
 	debugObject.depthColor = '#414a4c'
 
@@ -34,10 +33,4 @@ export function ragingSeas() {
 	water.rotation.x = -Math.PI * 0.5
 	water.position.z = -0.1
 	return water
-
-	const material = new ShaderMaterial({
-		vertexShader: waterVertexShader,
-		fragmentShader: waterFragmentShader,
-	})
-	return null
 }
